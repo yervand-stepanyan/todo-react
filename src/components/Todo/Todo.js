@@ -1,7 +1,5 @@
 import React from "react";
-
 import Input from "../Input/Input";
-
 import "./todo.css";
 import FilteringOptions from "../FilteringOptions/FilteringOptions";
 
@@ -26,7 +24,7 @@ export default class Todo extends React.Component {
     this.setState(state => ({
       todos: [
         ...state.todos,
-        { id: state.currentId, name: todoValue, isComplete: false }
+        {id: state.currentId, name: todoValue, isComplete: false}
       ],
       currentId: state.currentId + 1
     }));
@@ -36,7 +34,7 @@ export default class Todo extends React.Component {
     this.setState(state => ({
       todos: state.todos.map(todo =>
         todo.id === activeId
-          ? { ...todo, isComplete: !todo.isComplete, isEdit: false }
+          ? {...todo, isComplete: !todo.isComplete, isEdit: false}
           : todo
       )
     }));
@@ -45,17 +43,17 @@ export default class Todo extends React.Component {
   onTodoEdit = activeId => {
     this.setState(state => ({
       todos: state.todos.map(todo =>
-        todo.id === activeId ? { ...todo, isEdit: true } : todo
+        todo.id === activeId ? {...todo, isEdit: true} : todo
       )
     }));
   };
 
   onItemInputChange = (id, e) => {
-    const { value } = e.target;
+    const {value} = e.target;
 
     this.setState(state => ({
       todos: state.todos.map(todo =>
-        todo.id === id ? { ...todo, name: value } : todo
+        todo.id === id ? {...todo, name: value} : todo
       )
     }));
   };
@@ -66,7 +64,7 @@ export default class Todo extends React.Component {
     this.setState(state => ({
       todos: state.todos.map(todo =>
         todo.id === id
-          ? { ...todo, isEdit: isEnter ? false : todo.isEdit }
+          ? {...todo, isEdit: isEnter ? false : todo.isEdit}
           : todo
       )
     }));
@@ -91,33 +89,45 @@ export default class Todo extends React.Component {
   };
 
   render() {
-    const { todos, filter } = this.state;
+    const {todos, filter} = this.state;
     const normalizedTodos = this.getFilteredTodos(todos, filter);
 
     return (
-      <div>
-        <h1>Todo</h1>
-        <Input onTodoAdd={this.onTodoAdd} />
-        <section>
-          <ul>
-            {normalizedTodos.map(({ name, id, isComplete, isEdit }) => (
-              <li key={id} className={isComplete ? "checked" : ""}>
-                <input type="checkbox" onClick={() => this.onTodoSelect(id)} />
+      <div className="main">
+        <div className="contentSection">
+          <div className="title">
+            <h1>Todo</h1>
+          </div>
+          <div className="inputSection">
+            <div className="input">
+              <Input onTodoAdd={this.onTodoAdd}/>
+            </div>
+            <div className="section">
+              <section>
+                <ul>
+                  {normalizedTodos.map(({name, id, isComplete, isEdit}) => (
+                    <li key={id} className={isComplete ? "checked" : ""}>
+                      <input type="checkbox" onClick={() => this.onTodoSelect(id)}/>
 
-                {isEdit ? (
-                  <input
-                    value={name}
-                    onChange={e => this.onItemInputChange(id, e)}
-                    onKeyDown={e => this.onItemKeyPress(id, e)}
-                  />
-                ) : (
-                  <span onClick={() => this.onTodoEdit(id)}>{name}</span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-        <FilteringOptions filter={filter} onFilter={this.onFilter} />
+                      {isEdit ? (
+                        <input
+                          value={name}
+                          onChange={e => this.onItemInputChange(id, e)}
+                          onKeyDown={e => this.onItemKeyPress(id, e)}
+                        />
+                      ) : (
+                        <span onClick={() => this.onTodoEdit(id)}>{name}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </div>
+            <div className="filters">
+              <FilteringOptions filter={filter} onFilter={this.onFilter}/>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

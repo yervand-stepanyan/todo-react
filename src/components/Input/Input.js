@@ -1,4 +1,5 @@
 import React from "react";
+import "./input.css";
 
 export default class Input extends React.Component {
   constructor(props) {
@@ -10,7 +11,7 @@ export default class Input extends React.Component {
     };
   }
 
-  onInputChange = ({ target: { value } }) => {
+  onInputChange = ({target: {value}}) => {
     console.groupCollapsed("ON_INPUT_CHANGE");
     console.log(`value: ${value}`);
     console.groupEnd();
@@ -20,23 +21,32 @@ export default class Input extends React.Component {
   };
 
   handleSubmit = () => {
-    this.props.onTodoAdd(this.state.todoValue);
-    this.setState({
-      todoValue: ""
-    });
+    if (this.state.todoValue !== "") {
+      this.props.onTodoAdd(this.state.todoValue);
+      this.setState({
+        todoValue: ""
+      });
+    }
+  };
+
+  handleSubmitEnterKey = (event) => {
+    if (event.key === "Enter") {
+      this.handleSubmit();
+    }
   };
 
   render() {
-    const { placeholder, todoValue } = this.state;
+    const {placeholder, todoValue} = this.state;
 
     return (
-      <div>
+      <div className="inpDiv">
         <input
           placeholder={placeholder}
           value={todoValue}
           onChange={this.onInputChange}
+          onKeyDown={this.handleSubmitEnterKey}
         />
-        <button onClick={this.handleSubmit}>Add</button>
+        <button className="btnAdd" onClick={this.handleSubmit}>Add</button>
       </div>
     );
   }
