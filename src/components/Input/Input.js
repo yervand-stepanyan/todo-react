@@ -7,14 +7,18 @@ export default class Input extends React.Component {
 
     this.state = {
       todoValue: "",
-      placeholder: "Add Todo"
+      placeholder: "What needs to be done?"
     };
   }
 
+  componentDidMount() {
+    this.todoInput.focus();
+  }
+
   onInputChange = ({target: {value}}) => {
-    console.groupCollapsed("ON_INPUT_CHANGE");
-    console.log(`value: ${value}`);
-    console.groupEnd();
+    // console.groupCollapsed("ON_INPUT_CHANGE");
+    // console.log(`value: ${value}`);
+    // console.groupEnd();
     this.setState({
       todoValue: value
     });
@@ -26,6 +30,8 @@ export default class Input extends React.Component {
       this.setState({
         todoValue: ""
       });
+
+      this.todoInput.focus();
     }
   };
 
@@ -41,6 +47,8 @@ export default class Input extends React.Component {
     return (
       <div className="inpDiv">
         <input
+          ref={node => this.todoInput = node}
+          className="input"
           placeholder={placeholder}
           value={todoValue}
           onChange={this.onInputChange}
