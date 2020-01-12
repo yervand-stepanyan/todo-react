@@ -112,6 +112,14 @@ export default class Todo extends React.Component {
     return normalizedTodos;
   };
 
+  filterItemsLeft = () => {
+    const count = this.state.todos.filter(todo => !todo.isComplete).length;
+
+    console.log(count);
+
+    return count;
+  };
+
   render() {
     const {todos, filter} = this.state;
     const normalizedTodos = this.getFilteredTodos(todos, filter);
@@ -158,7 +166,7 @@ export default class Todo extends React.Component {
               </section>
             </div>
             <div className="filters">
-              <FilteringOptions filter={filter} onFilter={this.onFilter}/>
+              <FilteringOptions filter={filter} onFilter={this.onFilter} leftItems={this.filterItemsLeft()}/>
             </div>
           </div>
         </div>

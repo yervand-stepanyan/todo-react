@@ -64,6 +64,7 @@ li {
     text-decoration: line-through;
     color: #d9d9d9;
     transition: color 0.4s;
+    margin: 13px 0;
 }
 
 .unchecked {
@@ -109,7 +110,4 @@ li {
 
 }
 
-/*.select {*/
-/*    background-color: #ccc;*/
-/*}*/
 

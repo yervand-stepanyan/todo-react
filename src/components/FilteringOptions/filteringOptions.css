@@ -1,0 +1,21 @@
+.mainFilter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    cursor: default;
+    color: #777;
+}
+
+.filterBtn {
+    margin: 3px;
+    border: none;
+    border: 1px solid #a9a9a9;
+    border-radius: 3px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.select {
+    background-color: #ccc;
+}
