@@ -16,9 +16,6 @@ export default class Input extends React.Component {
   }
 
   onInputChange = ({target: {value}}) => {
-    // console.groupCollapsed("ON_INPUT_CHANGE");
-    // console.log(`value: ${value}`);
-    // console.groupEnd();
     this.setState({
       todoValue: value
     });

@@ -27,6 +27,44 @@ h1 {
     color: #4d4d4d;
     background-color: white;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #bfbfbf;
+}
+
+.inputDiv {
+    position: relative;
+}
+
+.showSelectAll {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    cursor: pointer;
+    display: block;
+}
+
+.hideSelectAll {
+    display: none;
+}
+
+i {
+    border: solid #e6e6e6;
+    border-width: 0 4px 4px 0;
+    display: inline-block;
+    padding: 7px;
+}
+
+i:hover {
+    border: solid rgba(175, 47, 47, 1);
+    border-width: 0 4px 4px 0;
+}
+
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+.noDisplay {
+    display: none;
 }
 
 ul {
@@ -107,7 +145,33 @@ li {
 .removeItem:hover {
     color: #b20000;
     text-shadow: -1px 0 #b20000, 0 1px #b20000, 1px 0 #b20000, 0 -1px #b20000;
+}
 
+.showFoldingEffect {
+    display: block;
+}
+
+.hideFoldingEffect {
+    display: none;
+}
+
+.footerDivLarge, .footerDivSmall {
+    height: 4px;
+    border-top: 0;
+    border-right: 1px solid #bfbfbf;
+    border-bottom: 1px solid #bfbfbf;
+    border-left: 1px solid #bfbfbf;
+    background-color: #f2f2f2;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+}
+
+.footerDivLarge {
+    width: 98.5%;
+}
+
+.footerDivSmall {
+    width: 97.5%;
 }
 
 

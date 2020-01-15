@@ -7,9 +7,8 @@ const FILTER_STATES = {
   completed: "completed"
 };
 
-export default function FilteringOptions({filter, onFilter, leftItems}) {
+export default function FilteringOptions({filter, onFilter, leftItems, onClearCompleted, isCompleted}) {
   const itemsLeft = `${leftItems} ${leftItems === 1 ? "item left" : "items left"}`;
-  const filterBtn=`${filter === FILTER_STATES.active ? "select" : ""} filterBtn`;
 
   return (
     <div className="mainFilter">
@@ -18,26 +17,27 @@ export default function FilteringOptions({filter, onFilter, leftItems}) {
       </div>
       <div className="filterButtons">
         <button
-          className={filter === FILTER_STATES.all ? "select" : ""}
+          className={`${filter === FILTER_STATES.all ? "select" : "filterBtnOnHover"} filterBtn`}
           onClick={() => onFilter(FILTER_STATES.all)}
         >
           All
         </button>
         <button
-          className={filter === FILTER_STATES.active ? "select" : ""}
+          className={`${filter === FILTER_STATES.active ? "select" : "filterBtnOnHover"} filterBtn`}
           onClick={() => onFilter(FILTER_STATES.active)}
         >
           Active
         </button>
         <button
-          className={filter === FILTER_STATES.completed ? "select" : ""}
+          className={`${filter === FILTER_STATES.completed ? "select" : "filterBtnOnHover"} filterBtn`}
           onClick={() => onFilter(FILTER_STATES.completed)}
         >
           Completed
         </button>
       </div>
       <div className="clear">
-        <span className="clearCompleted">Clear completed</span>
+        <span className={isCompleted ? "showClearCompleted" : "hideClearCompleted"}
+              onClick={onClearCompleted}>Clear completed</span>
       </div>
     </div>
   );

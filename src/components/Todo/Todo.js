@@ -16,7 +16,8 @@ export default class Todo extends React.Component {
     this.state = {
       todos: [],
       currentId: 1,
-      filter: FILTER_STATES.all
+      filter: FILTER_STATES.all,
+      isSelectAllClicked: false,
     };
   }
 
@@ -38,6 +39,15 @@ export default class Todo extends React.Component {
           : todo
       )
     }));
+  };
+
+  onSelectAll = () => {
+    this.setState({isSelectAllClicked: !this.state.isSelectAllClicked}, () =>
+      this.setState(state => ({
+        todos: state.todos.map(todo => ({...todo, isComplete: this.state.isSelectAllClicked, isEdit: false}))
+      }))
+    );
+
   };
 
   onTodoEdit = activeId => {
@@ -91,7 +101,11 @@ export default class Todo extends React.Component {
 
     this.setState(state => ({
       todos: state.todos.filter(todo => todo.id !== activeId)
-    }));
+    }), () => {
+      if (this.state.todos.length === 0) {
+        this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
+      }
+    });
   };
 
   onFilter = filter => {
@@ -115,14 +129,24 @@ export default class Todo extends React.Component {
   filterItemsLeft = () => {
     const count = this.state.todos.filter(todo => !todo.isComplete).length;
 
-    console.log(count);
-
     return count;
   };
+
+  // onClearCompleted = () => {
+  //   console.log(this.state.todos);
+  //
+  //   this.setState(state => ({
+  //     todos: state.todos.map(todo => {
+  //       if (!todo.isComplete)
+  //         return {...todo};
+  //     })
+  //   }), () => console.log(this.state.todos));
+  // };
 
   render() {
     const {todos, filter} = this.state;
     const normalizedTodos = this.getFilteredTodos(todos, filter);
+    const isCompleted = todos.some(todo => todo.isComplete);
 
     return (
       <div className="main">
@@ -132,9 +156,13 @@ export default class Todo extends React.Component {
           </div>
           <div className="inputSection">
             <div className="inputDiv">
+              <div className={todos.length > 0 ? "showSelectAll" : "hideSelectAll"}
+                   title="Mark all completed">
+                <i className="down" onClick={this.onSelectAll}></i>
+              </div>
               <Input onTodoAdd={this.onTodoAdd}/>
             </div>
-            <div className="section">
+            <div className={todos.length > 0 ? "section" : "noDisplay"}>
               <section>
                 <ul>
                   {normalizedTodos.map(({name, id, isComplete, isEdit}) => (
@@ -165,9 +193,19 @@ export default class Todo extends React.Component {
                 </ul>
               </section>
             </div>
-            <div className="filters">
-              <FilteringOptions filter={filter} onFilter={this.onFilter} leftItems={this.filterItemsLeft()}/>
+            <div className={todos.length > 0 ? "filters" : "noDisplay"}>
+              <FilteringOptions
+                filter={filter}
+                onFilter={this.onFilter}
+                leftItems={this.filterItemsLeft()}
+                onClearCompleted={this.onClearCompleted}
+                isCompleted={isCompleted}/>
             </div>
+
+          </div>
+          <div className={todos.length > 0 ? "showFoldingEffect" : "hideFoldingEffect"}>
+            <div className="footerDivLarge"></div>
+            <div className="footerDivSmall"></div>
           </div>
         </div>
       </div>

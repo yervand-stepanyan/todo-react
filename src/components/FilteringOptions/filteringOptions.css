@@ -1,21 +1,64 @@
 .mainFilter {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     align-items: center;
     padding: 10px;
     cursor: default;
     color: #777;
+    font-size: 14px;
+}
+
+.leftItems {
+    width: 28%;
+    display: flex;
+    justify-content: flex-start;
+    white-space: nowrap;
+}
+
+.filterButtons {
+    display: flex;
 }
 
 .filterBtn {
+    width: 42%;
+    display: flex;
+    justify-content: center;
     margin: 3px;
     border: none;
-    border: 1px solid #a9a9a9;
+    border: 1px solid transparent;
     border-radius: 3px;
     background-color: white;
     cursor: pointer;
+    outline: none;
+    color: #777;
+    padding: 3px 7px;
+}
+
+.filterBtnOnHover:hover {
+    border-color: rgba(175, 47, 47, 0.2);
 }
 
 .select {
-    background-color: #ccc;
+    border-color: rgba(175, 47, 47, 1);
+}
+
+.clear {
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+    white-space: nowrap;
+}
+
+.hideClearCompleted {
+    visibility: hidden;
+}
+
+.showClearCompleted {
+    visibility: visible;
+    cursor: pointer;
+}
+
+.clearCompleted:hover {
+    text-decoration: underline;
 }
