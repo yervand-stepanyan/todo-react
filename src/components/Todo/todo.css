@@ -27,7 +27,6 @@ h1 {
     color: #4d4d4d;
     background-color: white;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid #bfbfbf;
 }
 
 .inputDiv {
@@ -38,7 +37,6 @@ h1 {
     position: absolute;
     top: 15px;
     left: 20px;
-    cursor: pointer;
     display: block;
 }
 
@@ -51,6 +49,7 @@ i {
     border-width: 0 4px 4px 0;
     display: inline-block;
     padding: 7px;
+    cursor: pointer;
 }
 
 i:hover {
@@ -87,28 +86,71 @@ li {
     border-bottom: 1px solid #ededed;
 }
 
-.checkBox {
+/* CheckBox start */
+
+.css-checkbox + label {
     display: block;
-    min-width: 40px;
-    min-height: 40px;
+    margin: 0 10px;
     cursor: pointer;
 }
 
-.checkBoxNone {
+input[type=checkbox] {
     display: none;
 }
+
+.checkBoxNone + label {
+    display: none;
+}
+
+input[type=checkbox] + label:before {
+    content: "\2714";
+    border: 0.1em solid rgba(175, 47, 47, 0.15);
+    border-radius: 0.2em;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    padding-left: 0.2em;
+    padding-bottom: 0.3em;
+    margin-right: 0.2em;
+    vertical-align: bottom;
+    color: transparent;
+    transition: .2s;
+}
+
+input[type=checkbox] + label:active:before {
+    transform: scale(0);
+}
+
+input[type=checkbox]:checked + label:before {
+    background-color: MediumSeaGreen;
+    border-color: MediumSeaGreen;
+    color: #fff;
+}
+
+input[type=checkbox]:disabled + label:before {
+    transform: scale(1);
+    border-color: #aaa;
+}
+
+input[type=checkbox]:checked:disabled + label:before {
+    transform: scale(1);
+    background-color: #bfb;
+    border-color: #bfb;
+}
+
+/* CheckBox end */
 
 .checked {
     text-decoration: line-through;
     color: #d9d9d9;
-    transition: color 0.4s;
+    transition: color 0.2s;
     margin: 13px 0;
+    user-select: none;
 }
 
 .unchecked {
     text-decoration: none;
-    color: black;
-    transition: color 0.4s;
+    transition: color 0.2s;
     margin: 13px 0;
     user-select: none;
 }
@@ -157,7 +199,6 @@ li {
 
 .footerDivLarge, .footerDivSmall {
     height: 4px;
-    border-top: 0;
     border-right: 1px solid #bfbfbf;
     border-bottom: 1px solid #bfbfbf;
     border-left: 1px solid #bfbfbf;
@@ -167,10 +208,12 @@ li {
 }
 
 .footerDivLarge {
+    border-top: 1px solid #b2b2b2;
     width: 98.5%;
 }
 
 .footerDivSmall {
+    border-top: 0;
     width: 97.5%;
 }
 

@@ -18,6 +18,8 @@ export default class Todo extends React.Component {
       currentId: 1,
       filter: FILTER_STATES.all,
       isSelectAllClicked: false,
+      clickCount: 0,
+      checkbox: false,
     };
   }
 
@@ -25,7 +27,7 @@ export default class Todo extends React.Component {
     this.setState(state => ({
       todos: [
         ...state.todos,
-        {id: state.currentId, name: todoValue, isComplete: false}
+        {id: state.currentId, name: todoValue, isComplete: false, isEdit: false}
       ],
       currentId: state.currentId + 1
     }));
@@ -44,10 +46,33 @@ export default class Todo extends React.Component {
   onSelectAll = () => {
     this.setState({isSelectAllClicked: !this.state.isSelectAllClicked}, () =>
       this.setState(state => ({
-        todos: state.todos.map(todo => ({...todo, isComplete: this.state.isSelectAllClicked, isEdit: false}))
+        todos: state.todos.map(todo =>
+          ({...todo, isComplete: this.state.isSelectAllClicked, isEdit: false}))
       }))
     );
+  };
 
+  onCheckboxChange = (e, activeId) => {
+    this.onTodoSelect(activeId);
+  };
+
+  onTextClick = activeId => {
+    this.setState(state => ({
+      clickCount: state.clickCount + 1
+    }), () => {
+
+      if (this.state.clickCount === 1) {
+        this.singleClickTimer = setTimeout(() => {
+          this.setState({clickCount: 0});
+          this.onTodoSelect(activeId);
+        }, 400);
+      } else if (this.state.clickCount === 2) {
+        clearTimeout(this.singleClickTimer);
+        this.setState({clickCount: 0});
+        this.onTodoEdit(activeId);
+      }
+
+    });
   };
 
   onTodoEdit = activeId => {
@@ -144,7 +169,7 @@ export default class Todo extends React.Component {
   // };
 
   render() {
-    const {todos, filter} = this.state;
+    const {todos, filter, isSelectAllClicked} = this.state;
     const normalizedTodos = this.getFilteredTodos(todos, filter);
     const isCompleted = todos.some(todo => todo.isComplete);
 
@@ -168,8 +193,13 @@ export default class Todo extends React.Component {
                   {normalizedTodos.map(({name, id, isComplete, isEdit}) => (
                     <li key={id}>
                       <div className="liContent">
-                        <input type="checkbox" className={!isEdit ? "checkBox" : "checkBoxNone"}
-                               onClick={() => this.onTodoSelect(id)}/>
+                        <div className="checkBoxDiv">
+                          <input type="checkbox" id={`chbox${id}`}
+                                 onChange={e => this.onCheckboxChange(e, id)}
+                                 checked={isComplete}
+                                 className={!isEdit ? "css-checkbox" : "checkBoxNone"}/>
+                          <label htmlFor={`chbox${id}`} className="css-label"></label>
+                        </div>
                         {isEdit ? (
                           <input
                             ref={node => this.editInp = node}
@@ -181,7 +211,7 @@ export default class Todo extends React.Component {
                           />
                         ) : (
                           <span className={isComplete ? "checked" : "unchecked"}
-                                onClick={() => this.onTodoEdit(id)}>{name}</span>
+                                onClick={() => this.onTextClick(id)}>{name}</span>
                         )}
                         <button
                           className={!isEdit ? "removeItem" : "removeItemNone"}
