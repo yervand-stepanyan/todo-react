@@ -22,8 +22,13 @@ export default class Input extends React.Component {
   };
 
   handleSubmit = () => {
-    if (this.state.todoValue !== "") {
-      this.props.onTodoAdd(this.state.todoValue);
+    const valueFromInput = this.state.todoValue;
+    const firstReplace = valueFromInput.replace(/\s\s+/g, ' ');
+    const wsRegex = /^\s*|\s*$/g;
+    const value = firstReplace.replace(wsRegex, '');
+
+    if (value !== "") {
+      this.props.onTodoAdd(value);
       this.setState({
         todoValue: ""
       });

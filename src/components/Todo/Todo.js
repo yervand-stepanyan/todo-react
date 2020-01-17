@@ -23,24 +23,66 @@ export default class Todo extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.dataAfterRefresh();
+  }
+
+  // componentWillUnmount() {
+  //   console.log(this.state.todos);
+  //   this.setState(state => ({
+  //       todos: state.todos.map(todo => ({...todo, isEdit: false}))
+  //     }), () => localStorage.setItem("todos", JSON.stringify(this.state.todos))
+  //   );
+  // }
+
+  dataAfterRefresh = () => {
+    if (JSON.parse(localStorage.getItem("todos"))) {
+      this.setState({
+          todos: JSON.parse(localStorage.getItem("todos")),
+          isSelectAllClicked: JSON.parse(localStorage.getItem("isSelectAllClicked")),
+          filter: JSON.parse(localStorage.getItem("filter"))
+
+        }, () =>
+          this.setState(
+            {currentId: this.state.todos[this.state.todos.length - 1].id + 1}
+          )
+      )
+    }
+  };
+
   onTodoAdd = todoValue => {
     this.setState(state => ({
-      todos: [
-        ...state.todos,
-        {id: state.currentId, name: todoValue, isComplete: false, isEdit: false}
-      ],
-      currentId: state.currentId + 1
-    }));
+        todos: [
+          ...state.todos,
+          {id: state.currentId, name: todoValue, isComplete: false, isEdit: false}
+        ],
+        currentId: state.currentId + 1,
+      }), () => {
+        localStorage.setItem("todos", JSON.stringify(this.state.todos));
+        localStorage.setItem("isSelectAllClicked", JSON.stringify(this.state.isSelectAllClicked));
+        localStorage.setItem("filter", JSON.stringify(this.state.filter));
+      }
+    );
   };
 
   onTodoSelect = activeId => {
     this.setState(state => ({
-      todos: state.todos.map(todo =>
-        todo.id === activeId
-          ? {...todo, isComplete: !todo.isComplete, isEdit: false}
-          : todo
-      )
-    }));
+        todos: state.todos.map(todo =>
+          todo.id === activeId
+            ? {...todo, isComplete: !todo.isComplete, isEdit: false}
+            : todo
+        )
+      }), () => {
+        this.setState({
+            isSelectAllClicked: this.state.todos.every(todo => todo.isComplete)
+          },
+          () =>
+            localStorage.setItem("isSelectAllClicked", JSON.stringify(this.state.isSelectAllClicked))
+        );
+
+        localStorage.setItem("todos", JSON.stringify(this.state.todos));
+      }
+    );
   };
 
   onSelectAll = () => {
@@ -48,7 +90,10 @@ export default class Todo extends React.Component {
       this.setState(state => ({
         todos: state.todos.map(todo =>
           ({...todo, isComplete: this.state.isSelectAllClicked, isEdit: false}))
-      }))
+      }), () => {
+        localStorage.setItem("todos", JSON.stringify(this.state.todos));
+        localStorage.setItem("isSelectAllClicked", JSON.stringify(this.state.isSelectAllClicked));
+      })
     );
   };
 
@@ -77,10 +122,11 @@ export default class Todo extends React.Component {
 
   onTodoEdit = activeId => {
     this.setState(state => ({
-      todos: state.todos.map(todo =>
-        todo.id === activeId ? {...todo, isEdit: true} : todo
-      )
-    }));
+        todos: state.todos.map(todo =>
+          todo.id === activeId ? {...todo, isEdit: true} : todo
+        )
+      }), () => localStorage.setItem("todos", JSON.stringify(this.state.todos))
+    );
 
     setTimeout(() => {
       this.editInp.focus();
@@ -100,33 +146,100 @@ export default class Todo extends React.Component {
   onItemKeyPress = (id, e) => {
     const isEnter = e.key === "Enter";
 
-    this.setState(state => ({
-      todos: state.todos.map(todo =>
-        todo.id === id
-          ? {...todo, isEdit: isEnter ? false : todo.isEdit}
-          : todo
-      )
-    }));
+    if (isEnter) {
+      this.state.todos.forEach(todo => {
+        if (todo.id === id) {
+          if (todo.name) {
+            const name = this.state.todos.filter(todo => todo.id === id)[0].name;
+            const firstReplace = name.replace(/\s\s+/g, ' ');
+            const wsRegex = /^\s*|\s*$/g;
+            const value = firstReplace.replace(wsRegex, '');
+
+            this.setState(state => ({
+                todos: state.todos.map(todo =>
+                  todo.id === id
+                    ? {...todo, name: value, isEdit: isEnter ? false : todo.isEdit}
+                    : todo
+                )
+              }), () => {
+                localStorage.setItem("todos", JSON.stringify(this.state.todos));
+
+                if (this.state.todos.length === 0) {
+                  this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
+                  localStorage.clear();
+                }
+              }
+            );
+          } else {
+            this.setState(state => ({
+                todos: state.todos.filter(todo => todo.id !== id)
+              }), () => {
+                localStorage.setItem("todos", JSON.stringify(this.state.todos));
+
+                if (this.state.todos.length === 0) {
+                  this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
+                  localStorage.clear();
+                }
+              }
+            );
+          }
+        }
+      });
+    }
   };
 
   submitOnBlur = (id, e) => {
     e.preventDefault();
 
-    this.setState(state => ({
-      todos: state.todos.map(todo =>
-        todo.id === id
-          ? {...todo, isEdit: false}
-          : todo
-      )
-    }));
+    this.state.todos.forEach(todo => {
+      if (todo.id === id) {
+        if (todo.name) {
+          const name = this.state.todos.filter(todo => todo.id === id)[0].name;
+          const firstReplace = name.replace(/\s\s+/g, ' ');
+          const wsRegex = /^\s*|\s*$/g;
+          const value = firstReplace.replace(wsRegex, '');
+
+          this.setState(state => ({
+              todos: state.todos.map(todo =>
+                todo.id === id
+                  ? {...todo, name: value, isEdit: false}
+                  : todo
+              )
+            }), () => {
+              localStorage.setItem("todos", JSON.stringify(this.state.todos));
+
+              if (this.state.todos.length === 0) {
+                this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
+                localStorage.clear();
+              }
+            }
+          );
+        } else {
+          this.setState(state => ({
+              todos: state.todos.filter(todo => todo.id !== id)
+            }), () => {
+              localStorage.setItem("todos", JSON.stringify(this.state.todos));
+
+              if (this.state.todos.length === 0) {
+                this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
+                localStorage.clear();
+              }
+            }
+          );
+        }
+      }
+    });
   };
 
   onRemove = activeId => {
     this.setState(state => ({
       todos: state.todos.filter(todo => todo.id !== activeId)
     }), () => {
+      localStorage.setItem("todos", JSON.stringify(this.state.todos));
+
       if (this.state.todos.length === 0) {
         this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
+        localStorage.clear();
       }
     });
   };
@@ -134,7 +247,7 @@ export default class Todo extends React.Component {
   onFilter = filter => {
     this.setState({
       filter
-    });
+    }, () => localStorage.setItem("filter", JSON.stringify(this.state.filter)));
   };
 
   getFilteredTodos = (todos, filter) => {
@@ -159,8 +272,11 @@ export default class Todo extends React.Component {
     this.setState(state => ({
       todos: state.todos.filter(todo => !todo.isComplete)
     }), () => {
+      localStorage.setItem("todos", JSON.stringify(this.state.todos));
+
       if (this.state.todos.length === 0) {
         this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
+        localStorage.clear();
       }
     });
   };
