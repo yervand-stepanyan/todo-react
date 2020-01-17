@@ -91,17 +91,20 @@ li {
     border-bottom: 1px solid #ededed;
 }
 
+.css-checkbox + label, .down{
+    background: transparent;
+    box-shadow: none;
+    outline: 0 !important;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
 /* CheckBox start */
 
 .css-checkbox + label {
     display: block;
     margin: 0 10px;
     cursor: pointer;
-    background: transparent;
-    box-shadow: none;
-    outline: 0 !important;
-    outline: none !important;
-    -webkit-tap-highlight-color: transparent !important;
 }
 
 input[type=checkbox] {

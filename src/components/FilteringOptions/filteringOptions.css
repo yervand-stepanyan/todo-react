@@ -22,6 +22,14 @@
     margin: 10px auto 0;
 }
 
+.filterButtons, .clearCompleted {
+    background: transparent;
+    box-shadow: none;
+    outline: 0 !important;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
 .filterBtn {
     width: 42%;
     display: flex;
