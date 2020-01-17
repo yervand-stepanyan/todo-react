@@ -2,15 +2,15 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    align-items: center;
-    padding: 10px;
+    /*align-items: center;*/
+    padding: 0 10px 10px;
     cursor: default;
     color: #777;
     font-size: 14px;
 }
 
 .leftItems {
-    width: 28%;
+    width: 35%;
     display: flex;
     justify-content: flex-start;
     white-space: nowrap;
@@ -18,6 +18,8 @@
 
 .filterButtons {
     display: flex;
+    order: 2;
+    margin: 10px auto 0;
 }
 
 .filterBtn {
@@ -44,7 +46,8 @@
 }
 
 .clear {
-    width: 30%;
+    width: 35%;
+    order: 1;
     display: flex;
     justify-content: flex-end;
     white-space: nowrap;
@@ -61,4 +64,25 @@
 
 .clearCompleted:hover {
     text-decoration: underline;
+}
+
+@media only screen and (min-width: 503px) {
+    .mainFilter {
+        align-items: center;
+    }
+
+    .leftItems {
+        width: 28%;
+    }
+
+    .filterButtons {
+        display: flex;
+        order: 0;
+        margin: 0;
+    }
+
+    .clear {
+        width: 30%;
+        order: 0;
+    }
 }

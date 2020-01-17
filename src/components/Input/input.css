@@ -3,8 +3,8 @@
 }
 
 .input {
-    width: 85%;
-    font-size: 24px;
+    width: 83%;
+    font-size: 18px;
     padding: 16px 16px 16px 60px;
     border: none;
     background: rgba(0, 0, 0, 0.003);
@@ -13,8 +13,8 @@
 }
 
 .btnAdd {
-    width: 15%;
-    font-size: 24px;
+    width: 17%;
+    font-size: 18px;
     border: none;
     font-weight: bold;
     background-color: rgba(175, 47, 47, 0.15);
@@ -31,4 +31,28 @@
 ::placeholder {
     font-style: italic;
     color: #e6e6e6;
+}
+
+@media only screen and (min-width: 768px) {
+    .input {
+        width: 85%;
+        font-size: 22px;
+    }
+
+    .btnAdd {
+        width: 15%;
+        font-size: 22px;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .input {
+        width: 85%;
+        font-size: 24px;
+    }
+
+    .btnAdd {
+        width: 15%;
+        font-size: 24px;
+    }
 }
