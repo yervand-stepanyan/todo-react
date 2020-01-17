@@ -36,7 +36,7 @@ export default function FilteringOptions({filter, onFilter, leftItems, onClearCo
         </button>
       </div>
       <div className="clear">
-        <span className={isCompleted ? "showClearCompleted" : "hideClearCompleted"}
+        <span className={`${isCompleted ? "showClearCompleted" : "hideClearCompleted"} clearCompleted`}
               onClick={onClearCompleted}>Clear completed</span>
       </div>
     </div>

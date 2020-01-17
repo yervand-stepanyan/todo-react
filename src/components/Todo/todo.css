@@ -34,10 +34,15 @@ h1 {
 }
 
 .showSelectAll {
+    display: block;
     position: absolute;
     top: 15px;
     left: 20px;
-    display: block;
+}
+
+.selectAllClicked > i {
+    border: solid rgba(175, 47, 47, 1);
+    border-width: 0 4px 4px 0;
 }
 
 .hideSelectAll {

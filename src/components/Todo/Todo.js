@@ -122,8 +122,6 @@ export default class Todo extends React.Component {
   };
 
   onRemove = activeId => {
-    console.log(this.state.todos);
-
     this.setState(state => ({
       todos: state.todos.filter(todo => todo.id !== activeId)
     }), () => {
@@ -157,16 +155,15 @@ export default class Todo extends React.Component {
     return count;
   };
 
-  // onClearCompleted = () => {
-  //   console.log(this.state.todos);
-  //
-  //   this.setState(state => ({
-  //     todos: state.todos.map(todo => {
-  //       if (!todo.isComplete)
-  //         return {...todo};
-  //     })
-  //   }), () => console.log(this.state.todos));
-  // };
+  onClearCompleted = () => {
+    this.setState(state => ({
+      todos: state.todos.filter(todo => !todo.isComplete)
+    }), () => {
+      if (this.state.todos.length === 0) {
+        this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
+      }
+    });
+  };
 
   render() {
     const {todos, filter, isSelectAllClicked} = this.state;
@@ -181,7 +178,8 @@ export default class Todo extends React.Component {
           </div>
           <div className="inputSection">
             <div className="inputDiv">
-              <div className={todos.length > 0 ? "showSelectAll" : "hideSelectAll"}
+              <div className={`${todos.length > 0 ? "showSelectAll" : "hideSelectAll"} 
+              ${isSelectAllClicked ? "selectAllClicked" : ""}`}
                    title="Mark all completed">
                 <i className="down" onClick={this.onSelectAll}></i>
               </div>
