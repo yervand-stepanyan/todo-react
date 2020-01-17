@@ -54,7 +54,7 @@ export default class Todo extends React.Component {
     this.setState(state => ({
         todos: [
           ...state.todos,
-          {id: state.currentId, name: todoValue, isComplete: false, isEdit: false}
+          {id: state.currentId, title: todoValue, isComplete: false, isEdit: false}
         ],
         currentId: state.currentId + 1,
       }), () => {
@@ -138,7 +138,7 @@ export default class Todo extends React.Component {
 
     this.setState(state => ({
       todos: state.todos.map(todo =>
-        todo.id === id ? {...todo, name: value} : todo
+        todo.id === id ? {...todo, title: value} : todo
       )
     }));
   };
@@ -149,16 +149,16 @@ export default class Todo extends React.Component {
     if (isEnter) {
       this.state.todos.forEach(todo => {
         if (todo.id === id) {
-          if (todo.name) {
-            const name = this.state.todos.filter(todo => todo.id === id)[0].name;
-            const firstReplace = name.replace(/\s\s+/g, ' ');
+          if (todo.title) {
+            const title = this.state.todos.filter(todo => todo.id === id)[0].title;
+            const firstReplace = title.replace(/\s\s+/g, ' ');
             const wsRegex = /^\s*|\s*$/g;
             const value = firstReplace.replace(wsRegex, '');
 
             this.setState(state => ({
                 todos: state.todos.map(todo =>
                   todo.id === id
-                    ? {...todo, name: value, isEdit: isEnter ? false : todo.isEdit}
+                    ? {...todo, title: value, isEdit: isEnter ? false : todo.isEdit}
                     : todo
                 )
               }), () => {
@@ -193,16 +193,16 @@ export default class Todo extends React.Component {
 
     this.state.todos.forEach(todo => {
       if (todo.id === id) {
-        if (todo.name) {
-          const name = this.state.todos.filter(todo => todo.id === id)[0].name;
-          const firstReplace = name.replace(/\s\s+/g, ' ');
+        if (todo.title) {
+          const title = this.state.todos.filter(todo => todo.id === id)[0].title;
+          const firstReplace = title.replace(/\s\s+/g, ' ');
           const wsRegex = /^\s*|\s*$/g;
           const value = firstReplace.replace(wsRegex, '');
 
           this.setState(state => ({
               todos: state.todos.map(todo =>
                 todo.id === id
-                  ? {...todo, name: value, isEdit: false}
+                  ? {...todo, title: value, isEdit: false}
                   : todo
               )
             }), () => {
@@ -304,7 +304,7 @@ export default class Todo extends React.Component {
             <div className={todos.length > 0 ? "section" : "noDisplay"}>
               <section>
                 <ul>
-                  {normalizedTodos.map(({name, id, isComplete, isEdit}) => (
+                  {normalizedTodos.map(({title, id, isComplete, isEdit}) => (
                     <li key={id}>
                       <div className="liContent">
                         <div className="checkBoxDiv">
@@ -318,14 +318,14 @@ export default class Todo extends React.Component {
                           <input
                             ref={node => this.editInp = node}
                             className="editInput"
-                            value={name}
+                            value={title}
                             onChange={e => this.onItemInputChange(id, e)}
                             onKeyDown={e => this.onItemKeyPress(id, e)}
                             onBlur={e => this.submitOnBlur(id, e)}
                           />
                         ) : (
                           <span className={isComplete ? "checked" : "unchecked"}
-                                onClick={() => this.onTextClick(id)}>{name}</span>
+                                onClick={() => this.onTextClick(id)}>{title}</span>
                         )}
                         <button
                           className={!isEdit ? "removeItem" : "removeItemNone"}
