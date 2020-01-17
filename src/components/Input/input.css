@@ -22,6 +22,7 @@
     color: white;
     cursor: pointer;
     outline: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .btnAdd:hover {

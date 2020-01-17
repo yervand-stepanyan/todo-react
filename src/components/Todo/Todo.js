@@ -296,8 +296,8 @@ export default class Todo extends React.Component {
             <div className="inputDiv">
               <div className={`${todos.length > 0 ? "showSelectAll" : "hideSelectAll"} 
               ${isSelectAllClicked ? "selectAllClicked" : ""}`}
-                   title="Mark all completed">
-                <i className="down" onClick={this.onSelectAll}></i>
+                   title="Mark all completed" onClick={this.onSelectAll}>
+                <i className="down"></i>
               </div>
               <Input onTodoAdd={this.onTodoAdd}/>
             </div>

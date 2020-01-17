@@ -34,10 +34,17 @@ h1 {
 }
 
 .showSelectAll {
+    width: 60px;
+    height: 100%;
+    text-align: center;
     display: block;
     position: absolute;
-    top: 15px;
-    left: 20px;
+    cursor: pointer;
+}
+
+.showSelectAll:hover > i {
+    border: solid rgba(175, 47, 47, 1);
+    border-width: 0 4px 4px 0;
 }
 
 .selectAllClicked > i {
@@ -54,17 +61,12 @@ i {
     border-width: 0 4px 4px 0;
     display: inline-block;
     padding: 7px;
-    cursor: pointer;
-}
-
-i:hover {
-    border: solid rgba(175, 47, 47, 1);
-    border-width: 0 4px 4px 0;
 }
 
 .down {
     transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
+    margin-top: 25%;
 }
 
 .noDisplay {
@@ -91,7 +93,7 @@ li {
     border-bottom: 1px solid #ededed;
 }
 
-.css-checkbox + label, .down{
+.css-checkbox + label, .showSelectAll {
     background: transparent;
     box-shadow: none;
     outline: 0 !important;
