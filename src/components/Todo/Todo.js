@@ -27,14 +27,6 @@ export default class Todo extends React.Component {
     this.dataAfterRefresh();
   }
 
-  // componentWillUnmount() {
-  //   console.log(this.state.todos);
-  //   this.setState(state => ({
-  //       todos: state.todos.map(todo => ({...todo, isEdit: false}))
-  //     }), () => localStorage.setItem("todos", JSON.stringify(this.state.todos))
-  //   );
-  // }
-
   dataAfterRefresh = () => {
     if (JSON.parse(localStorage.getItem("todos"))) {
       this.setState({
@@ -121,11 +113,13 @@ export default class Todo extends React.Component {
   };
 
   onTodoEdit = activeId => {
+    console.log("1");
+
     this.setState(state => ({
         todos: state.todos.map(todo =>
           todo.id === activeId ? {...todo, isEdit: true} : todo
         )
-      }), () => localStorage.setItem("todos", JSON.stringify(this.state.todos))
+      })
     );
 
     setTimeout(() => {
@@ -189,6 +183,7 @@ export default class Todo extends React.Component {
   };
 
   submitOnBlur = (id, e) => {
+    console.log("2");
     e.preventDefault();
 
     this.state.todos.forEach(todo => {
