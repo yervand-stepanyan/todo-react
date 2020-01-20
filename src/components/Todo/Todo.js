@@ -13,34 +13,20 @@ export default class Todo extends React.Component {
   constructor(props) {
     super(props);
 
+    const todos = JSON.parse(localStorage.getItem("todos")) || [];
+    const currentId = todos.length > 0 ? todos[todos.length - 1].id + 1 : 1;
+    const filter = JSON.parse(localStorage.getItem("filter")) || FILTER_STATES.all;
+    const isSelectAllClicked = JSON.parse(localStorage.getItem("isSelectAllClicked")) || false;
+
     this.state = {
-      todos: [],
-      currentId: 1,
-      filter: FILTER_STATES.all,
-      isSelectAllClicked: false,
+      todos,
+      currentId,
+      filter,
+      isSelectAllClicked,
       clickCount: 0,
       checkbox: false,
     };
   }
-
-  componentDidMount() {
-    this.dataAfterRefresh();
-  }
-
-  dataAfterRefresh = () => {
-    if (JSON.parse(localStorage.getItem("todos"))) {
-      this.setState({
-          todos: JSON.parse(localStorage.getItem("todos")),
-          isSelectAllClicked: JSON.parse(localStorage.getItem("isSelectAllClicked")),
-          filter: JSON.parse(localStorage.getItem("filter"))
-
-        }, () =>
-          this.setState(
-            {currentId: this.state.todos[this.state.todos.length - 1].id + 1}
-          )
-      )
-    }
-  };
 
   onTodoAdd = todoValue => {
     this.setState(state => ({
