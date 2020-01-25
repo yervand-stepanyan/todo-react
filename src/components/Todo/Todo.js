@@ -99,8 +99,6 @@ export default class Todo extends React.Component {
   };
 
   onTodoEdit = activeId => {
-    console.log("1");
-
     this.setState(state => ({
         todos: state.todos.map(todo =>
           todo.id === activeId ? {...todo, isEdit: true} : todo
@@ -169,7 +167,6 @@ export default class Todo extends React.Component {
   };
 
   submitOnBlur = (id, e) => {
-    console.log("2");
     e.preventDefault();
 
     this.state.todos.forEach(todo => {

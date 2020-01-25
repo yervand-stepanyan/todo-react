@@ -82,6 +82,7 @@ ul {
     display: flex;
     align-items: center;
     position: relative;
+    word-break: break-all;
 }
 
 .liContent:hover > .removeItem {
@@ -160,12 +161,14 @@ input[type=checkbox]:checked:disabled + label:before {
     color: #d9d9d9;
     transition: color 0.2s;
     margin: 13px 0;
+    /*word-break: break-all;*/
 }
 
 .unchecked {
     text-decoration: none;
     transition: color 0.2s;
     margin: 13px 0;
+    /*word-break: break-all;*/
 }
 
 .editInput {
