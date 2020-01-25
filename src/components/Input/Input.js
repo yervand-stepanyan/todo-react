@@ -7,9 +7,12 @@ export default class Input extends React.Component {
 
     this.state = {
       todoValue: "",
-      placeholder: "What needs to be done?"
     };
   }
+
+  static VARIABLES = {
+    placeholder: "What needs to be done?"
+  };
 
   componentDidMount() {
     this.todoInput.focus();
@@ -44,14 +47,14 @@ export default class Input extends React.Component {
   };
 
   render() {
-    const {placeholder, todoValue} = this.state;
+    const {todoValue} = this.state;
 
     return (
       <div className="inpDiv">
         <input
           ref={node => this.todoInput = node}
           className="input"
-          placeholder={placeholder}
+          placeholder={Input.VARIABLES.placeholder}
           value={todoValue}
           onChange={this.onInputChange}
           onKeyDown={this.handleSubmitEnterKey}
