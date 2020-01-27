@@ -82,7 +82,7 @@ ul {
     display: flex;
     align-items: center;
     position: relative;
-    word-break: break-all;
+    word-break: break-word;
 }
 
 .liContent:hover > .removeItem {
