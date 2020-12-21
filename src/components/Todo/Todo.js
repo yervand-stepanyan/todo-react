@@ -1,7 +1,10 @@
 import React from "react";
-import Input from "../Input/Input";
-import "./todo.css";
+
 import FilteringOptions from "../FilteringOptions/FilteringOptions";
+import Input from "../Input/Input";
+import {loadState, removeState, saveState} from "../../helpers/localStorage";
+import {LOCAL_STORAGE} from "../../globals/constants";
+import "./todo.css";
 
 const FILTER_STATES = {
   all: "all",
@@ -13,10 +16,10 @@ export default class Todo extends React.Component {
   constructor(props) {
     super(props);
 
-    const todos = JSON.parse(localStorage.getItem("todos")) || [];
+    const todos = loadState(LOCAL_STORAGE.todos) || [];
     const currentId = todos.length > 0 ? todos[todos.length - 1].id + 1 : 1;
-    const filter = JSON.parse(localStorage.getItem("filter")) || FILTER_STATES.all;
-    const isSelectAllClicked = JSON.parse(localStorage.getItem("isSelectAllClicked")) || false;
+    const filter = loadState(LOCAL_STORAGE.filter) || FILTER_STATES.all;
+    const isSelectAllClicked = loadState(LOCAL_STORAGE.isSelectAllClicked) || false;
 
     this.state = {
       todos,
@@ -36,9 +39,9 @@ export default class Todo extends React.Component {
         ],
         currentId: state.currentId + 1,
       }), () => {
-        localStorage.setItem("todos", JSON.stringify(this.state.todos));
-        localStorage.setItem("isSelectAllClicked", JSON.stringify(this.state.isSelectAllClicked));
-        localStorage.setItem("filter", JSON.stringify(this.state.filter));
+        saveState(LOCAL_STORAGE.todos, this.state.todos);
+        saveState(LOCAL_STORAGE.isSelectAllClicked, this.state.isSelectAllClicked);
+        saveState(LOCAL_STORAGE.filter, this.state.filter);
       }
     );
   };
@@ -55,10 +58,10 @@ export default class Todo extends React.Component {
             isSelectAllClicked: this.state.todos.every(todo => todo.isComplete)
           },
           () =>
-            localStorage.setItem("isSelectAllClicked", JSON.stringify(this.state.isSelectAllClicked))
+            saveState(LOCAL_STORAGE.isSelectAllClicked, this.state.isSelectAllClicked)
         );
 
-        localStorage.setItem("todos", JSON.stringify(this.state.todos));
+        saveState(LOCAL_STORAGE.todos, this.state.todos);
       }
     );
   };
@@ -69,8 +72,8 @@ export default class Todo extends React.Component {
         todos: state.todos.map(todo =>
           ({...todo, isComplete: this.state.isSelectAllClicked, isEdit: false}))
       }), () => {
-        localStorage.setItem("todos", JSON.stringify(this.state.todos));
-        localStorage.setItem("isSelectAllClicked", JSON.stringify(this.state.isSelectAllClicked));
+        saveState(LOCAL_STORAGE.todos, this.state.todos);
+        saveState(LOCAL_STORAGE.isSelectAllClicked, this.state.isSelectAllClicked);
       })
     );
   };
@@ -140,11 +143,13 @@ export default class Todo extends React.Component {
                     : todo
                 )
               }), () => {
-                localStorage.setItem("todos", JSON.stringify(this.state.todos));
+                saveState(LOCAL_STORAGE.todos, this.state.todos);
 
                 if (this.state.todos.length === 0) {
                   this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
-                  localStorage.clear();
+                  removeState(LOCAL_STORAGE.todos);
+                  removeState(LOCAL_STORAGE.filter);
+                  removeState(LOCAL_STORAGE.isSelectAllClicked);
                 }
               }
             );
@@ -152,11 +157,13 @@ export default class Todo extends React.Component {
             this.setState(state => ({
                 todos: state.todos.filter(todo => todo.id !== id)
               }), () => {
-                localStorage.setItem("todos", JSON.stringify(this.state.todos));
+                saveState(LOCAL_STORAGE.todos, this.state.todos);
 
                 if (this.state.todos.length === 0) {
                   this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
-                  localStorage.clear();
+                  removeState(LOCAL_STORAGE.todos);
+                  removeState(LOCAL_STORAGE.filter);
+                  removeState(LOCAL_STORAGE.isSelectAllClicked);
                 }
               }
             );
@@ -184,11 +191,13 @@ export default class Todo extends React.Component {
                   : todo
               )
             }), () => {
-              localStorage.setItem("todos", JSON.stringify(this.state.todos));
+              saveState(LOCAL_STORAGE.todos, this.state.todos);
 
               if (this.state.todos.length === 0) {
                 this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
-                localStorage.clear();
+                removeState(LOCAL_STORAGE.todos);
+                removeState(LOCAL_STORAGE.filter);
+                removeState(LOCAL_STORAGE.isSelectAllClicked);
               }
             }
           );
@@ -196,11 +205,13 @@ export default class Todo extends React.Component {
           this.setState(state => ({
               todos: state.todos.filter(todo => todo.id !== id)
             }), () => {
-              localStorage.setItem("todos", JSON.stringify(this.state.todos));
+              saveState(LOCAL_STORAGE.todos, this.state.todos);
 
               if (this.state.todos.length === 0) {
                 this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
-                localStorage.clear();
+                removeState(LOCAL_STORAGE.todos);
+                removeState(LOCAL_STORAGE.filter);
+                removeState(LOCAL_STORAGE.isSelectAllClicked);
               }
             }
           );
@@ -213,11 +224,13 @@ export default class Todo extends React.Component {
     this.setState(state => ({
       todos: state.todos.filter(todo => todo.id !== activeId)
     }), () => {
-      localStorage.setItem("todos", JSON.stringify(this.state.todos));
+      saveState(LOCAL_STORAGE.todos, this.state.todos);
 
       if (this.state.todos.length === 0) {
         this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
-        localStorage.clear();
+        removeState(LOCAL_STORAGE.todos);
+        removeState(LOCAL_STORAGE.filter);
+        removeState(LOCAL_STORAGE.isSelectAllClicked);
       }
     });
   };
@@ -225,7 +238,7 @@ export default class Todo extends React.Component {
   onFilter = filter => {
     this.setState({
       filter
-    }, () => localStorage.setItem("filter", JSON.stringify(this.state.filter)));
+    }, () => saveState(LOCAL_STORAGE.filter, this.state.filter));
   };
 
   getFilteredTodos = (todos, filter) => {
@@ -241,20 +254,20 @@ export default class Todo extends React.Component {
   };
 
   filterItemsLeft = () => {
-    const count = this.state.todos.filter(todo => !todo.isComplete).length;
-
-    return count;
+    return this.state.todos.filter(todo => !todo.isComplete).length;
   };
 
   onClearCompleted = () => {
     this.setState(state => ({
       todos: state.todos.filter(todo => !todo.isComplete)
     }), () => {
-      localStorage.setItem("todos", JSON.stringify(this.state.todos));
+      saveState(LOCAL_STORAGE.todos, this.state.todos);
 
       if (this.state.todos.length === 0) {
         this.setState({filter: FILTER_STATES.all, isSelectAllClicked: false});
-        localStorage.clear();
+        removeState(LOCAL_STORAGE.todos);
+        removeState(LOCAL_STORAGE.filter);
+        removeState(LOCAL_STORAGE.isSelectAllClicked);
       }
     });
   };
@@ -275,7 +288,7 @@ export default class Todo extends React.Component {
               <div className={`${todos.length > 0 ? "showSelectAll" : "hideSelectAll"} 
               ${isSelectAllClicked ? "selectAllClicked" : ""}`}
                    title="Mark all completed" onClick={this.onSelectAll}>
-                <i className="down"></i>
+                <i className="down" />
               </div>
               <Input onTodoAdd={this.onTodoAdd}/>
             </div>
@@ -290,7 +303,7 @@ export default class Todo extends React.Component {
                                  onChange={e => this.onCheckboxChange(e, id)}
                                  checked={isComplete}
                                  className={!isEdit ? "css-checkbox" : "checkBoxNone"}/>
-                          <label htmlFor={`chbox${id}`} className="css-label"></label>
+                          <label htmlFor={`chbox${id}`} className="css-label" />
                         </div>
                         {isEdit ? (
                           <input
@@ -326,8 +339,8 @@ export default class Todo extends React.Component {
 
           </div>
           <div className={todos.length > 0 ? "showFoldingEffect" : "hideFoldingEffect"}>
-            <div className="footerDivLarge"></div>
-            <div className="footerDivSmall"></div>
+            <div className="footerDivLarge" />
+            <div className="footerDivSmall" />
           </div>
         </div>
       </div>
